@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/dadishu.css"/>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//创建1个元素
+			var page1 = document.createElement("div");
+			//设置类名
+			page1.className = "page1";
+			//设置id
+			page1.id = "page1";
+			
+			var pagetop = document.createElement("div");
+			pagetop.className = "pagetop";
+			pagetop.id = "pagetop";
+			pagetop.innerHTML = "<div class='time'><img src='img/countdown_time.png'/><span>10s</span></div>"+
+								"<div class='share'><img src='img/countdown_share.png'/></div>"+
+								"<div class='starGame'><img src='img/game_btn_star.png'/></div>"+
+								"<div class='jihui'>剩余<span>5</span>次机会</div>";
+								
+								
+			//将pagetop中的元素对象添加进page1中
+			page1.appendChild(pagetop);
+			document.body.appendChild(page1);
+			
+			var mice = document.createElement("div");
+			mice.className="mice";
+			mice.id = 'mice';
+			var str = "";
+			
+			for( var i=0;i<12;i++){
+				str = str + "<div><img id='dishu"+ i +"' src='img/vendor_people00.png'></div>"
+			}
+			mice.innerHTML = str;	
+			page1.appendChild(mice);
+			
+			
+			//获取需要用到的元素
+			var starBtn = document.querySelector(".starGame");
+			var timeSpan = document.querySelector(".time span");
+			var randomNum;
+			var score = 0;
+			var orclick = false;
+			
+			
+			var endGame = function(){
+				var endimg = document.createElement("div");
+				
+				endimg.id = "enddiv";
+				endimg.innerHTML ='<img src = "img/pop_score_bg.png"/>'+
+										'<h3>'+score+'分</h3>'+
+										'<h2 id = "again">再来一次</h2>';
+				
+				document.body.appendChild(endimg);
+				
+				//刷新页面
+				document.querySelector("#again").onclick = function(){
+					location.reload();
+				}
+			}
+			
+			//开始按钮后执行的内容
+			var starEvent = function(){
+				starBtn.style.display = "none";
+			
+			//间隔函数
+			var num = 10;
+			var clearTime = setInterval(function(){
+				orclick = false;
+				for(var i = 0;i<12;i++){
+						document.querySelector("#dishu"+i).src = "img/vendor_people00.png";
+					}
+				
+				
+				timeSpan.innerHTML = num + "s";
+				num--;
+				if(num < 0){
+					clearInterval(clearTime);
+					console.log(score);
+					
+					endGame()
+				}
+				
+				
+				randomNum = parseInt(Math.random()*12)
+				document.querySelector("#dishu"+randomNum).src = "img/vendor_hole01.png";
+				
+			},1000)
+			
+			//击打老鼠事件
+			var clickMice = function(event){
+				console.log(event.target.id);
+				var str = "dishu" + randomNum;
+				
+//				console.log(str);
+				//id要相等 只能点一次
+				if(event.target.id == str &&!orclick){
+//					event.target.src = "img/vendor_helo02.png";
+					event.target.src = "img/vendor_hole02.png";
+					score += 100;
+					orclick = true;
+				}
+			}
+			mice.addEventListener("click",clickMice)
+		}
+			//开始按钮事件
+			starBtn.addEventListener("click",starEvent);
+			
+			//取随机数
+			console.log(parseInt(Math.random()*12))
+			
+			
+//			mice.onclick = function(event){
+//				console.log(event.target.id);
+//			}
+		</script>
+	</body>
+</html>
